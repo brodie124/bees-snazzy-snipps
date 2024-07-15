@@ -1,4 +1,4 @@
-namespace BeesSnazzySnips.Results;
+namespace BeesSnazzySnippets.Results;
 
 public static class ApiResult
 {

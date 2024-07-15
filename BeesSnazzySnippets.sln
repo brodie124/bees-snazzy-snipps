@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeesSnazzySnips", "BeesSnazzySnips\BeesSnazzySnips.csproj", "{AFF32308-DE4A-4DB4-AA5C-CE9459A44596}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeesSnazzySnippets", "BeesSnazzySnippets\BeesSnazzySnippets.csproj", "{AFF32308-DE4A-4DB4-AA5C-CE9459A44596}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
