@@ -1,16 +1,8 @@
 namespace BeesSnazzySnips.Results;
 
-public record ApiResult<T>(
-    ResultStatusCode StatusCode,
-    T? Value,
-    string? ErrorMessage
-)
+public static class ApiResult
 {
-    public static implicit operator ApiResult<T>(T? value) => Success(value);
-
-    public bool IsSuccess => StatusCode == ResultStatusCode.Ok;
-
-    public static ApiResult<T> Success(T? value = default)
+    public static ApiResult<T> Success<T>(T? value = default)
     {
         return new ApiResult<T>(
             StatusCode: ResultStatusCode.Ok, 
@@ -18,8 +10,11 @@ public record ApiResult<T>(
             ErrorMessage: null
         );
     }
-
-    public static ApiResult<T> Failure(ResultStatusCode statusCode, string? errorMessage = null, T? value = default)
+    
+    public static ApiResult<T> Failure<T>(
+        ResultStatusCode statusCode, 
+        string? errorMessage = null, 
+        T? value = default)
     {
         return new ApiResult<T>(
             StatusCode: statusCode,
@@ -27,47 +22,41 @@ public record ApiResult<T>(
             ErrorMessage: errorMessage
         );
     }
-
-
-    public static ApiResult<T> FromServiceResult(ServiceResult<T> serviceResult)
+    
+    public static ApiResult<T> FromServiceResult<T>(
+        ServiceResult<T> serviceResult, 
+        string? errorMessage = null)
     {
         return new ApiResult<T>(
             StatusCode: serviceResult.StatusCode,
             Value: serviceResult.Value,
-            ErrorMessage: serviceResult.ErrorMessage
+            ErrorMessage: errorMessage ?? serviceResult.ErrorMessage
         );
     }
+}
 
-    public static ApiResult<T> FromServiceResult(ServiceResult<T> serviceResult, string errorMessage)
-    {
-        return new ApiResult<T>(
-            StatusCode: serviceResult.StatusCode,
-            Value: serviceResult.Value,
-            ErrorMessage: errorMessage
-        );
-    }
-     
-    public static ApiResult<T> FromServiceResult(ServiceResult<T> serviceResult, Func<ServiceResult<T>, string> errorMessageMapFunc)
-    {
-        var errorMessage = errorMessageMapFunc(serviceResult);
-        return new ApiResult<T>(
-            StatusCode: serviceResult.StatusCode,
-            Value: serviceResult.Value,
-            ErrorMessage: errorMessage
-        );
-    }
+public record ApiResult<T>(
+    ResultStatusCode StatusCode,
+    T? Value,
+    string? ErrorMessage
+)
+{
+    public static implicit operator ApiResult<T>(T? value) => ApiResult.Success(value);
 
-    public ApiResult<TAlt> Map<TAlt>(Func<T?, TAlt?> mapFunc)
+    public bool IsSuccess => StatusCode == ResultStatusCode.Ok;
+    public bool IsFailure => !IsSuccess;
+    
+    public ApiResult<TAlt> ConvertValueNotNull<TAlt>(Func<T, TAlt?> mapFunc)
     {
-        return Map(mapFunc, mapFunc);
+        return ConvertValue(mapFunc, _ => default);
     }
     
-    public ApiResult<TAlt> MapWhenNotNull<TAlt>(Func<T, TAlt?> mapFunc)
+    public ApiResult<TAlt> ConvertValue<TAlt>(Func<T?, TAlt?> mapFunc)
     {
-        return Map(mapFunc, _ => default);
+        return ConvertValue(mapFunc, mapFunc);
     }
 
-    public ApiResult<TAlt> Map<TAlt>(Func<T, TAlt?> whenNotNullFunc, Func<T?, TAlt?> whenNullFunc)
+    public ApiResult<TAlt> ConvertValue<TAlt>(Func<T, TAlt?> whenNotNullFunc, Func<T?, TAlt?> whenNullFunc)
     {
         var mappedValue = Value is not null
             ? whenNotNullFunc(Value)
