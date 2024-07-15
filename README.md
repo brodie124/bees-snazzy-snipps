@@ -54,7 +54,7 @@ it may look as follows:
     public async Task<IActionResult> CreateUser(string username, string password)
     {
         var createUserResult = await CreateUserAsync(username, password);
-        if (createUserResult.TryGet(var user))
+        if (createUserResult.TryGet(out var user))
             return Ok(user);
 
         if (createUserResult.StatusCode == ResultStatusCode.ResourceAlreadyExists)
