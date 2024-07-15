@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace BeesSnazzySnips.Results;
 
-public abstract class ServiceResult
+public static class ServiceResult
 {
     /// <summary>
     /// Create a "Success" service result, with a status code and an optional value.
