@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace BsSnazzySnippets.Results;
+namespace BeesSnazzySnips.Results;
 
 public abstract class ServiceResult
 {

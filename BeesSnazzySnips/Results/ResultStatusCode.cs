@@ -1,4 +1,4 @@
-namespace BsSnazzySnippets.Results;
+namespace BeesSnazzySnips.Results;
 
 public enum ResultStatusCode
 {

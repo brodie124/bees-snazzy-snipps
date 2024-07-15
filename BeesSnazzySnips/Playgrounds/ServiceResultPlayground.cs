@@ -1,6 +1,6 @@
-using BsSnazzySnippets.Results;
+using BeesSnazzySnips.Results;
 
-namespace BsSnazzySnippets.Playgrounds;
+namespace BeesSnazzySnips.Playgrounds;
 
 internal sealed record ComplexType(string Name, int Age);
 
