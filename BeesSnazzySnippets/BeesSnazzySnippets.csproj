@@ -7,7 +7,6 @@
         <PackageId>BeesSnazzySnippets</PackageId>
         <Authors>brodie124</Authors>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>
