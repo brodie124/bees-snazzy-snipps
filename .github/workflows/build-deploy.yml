@@ -40,7 +40,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         
-      - run: echo ${{ toJSON(steps.get_version.outputs) }}
+      - run: echo "${{ toJSON(steps.get_version.outputs) }}"
         
       - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} /p:Version="${{ steps.get_version.outputs.VERSION != '' && steps.get_version.outputs.VERSION || format('1.0.', github.run_number) }}"
       
