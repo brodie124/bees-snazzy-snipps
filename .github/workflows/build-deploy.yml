@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Detect version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF_NAME}
+        run: echo ::set-output name=VERSION::${github.ref_name#v}
         
       - uses: actions/checkout@v3
         with:
