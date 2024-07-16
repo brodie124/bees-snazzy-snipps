@@ -42,7 +42,7 @@ jobs:
         
       - run: echo '${{ toJSON(steps.get_version.outputs) }}'
         
-      - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} /p:Version="${{ steps.get_version.outputs.VERSION != '' && steps.get_version.outputs.VERSION || format('1.0.', github.run_number) }}"
+      - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} /p:Version="${{ steps.get_version.outputs.VERSION != '' && steps.get_version.outputs.VERSION || format('1.0.{0}', github.run_number) }}"
       
       - uses: actions/upload-artifact@v3
         with:
