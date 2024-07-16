@@ -29,7 +29,7 @@ jobs:
       - name: Detect version
         id: get_version
         run: |
-          echo "VERSION=$(echo ''${{github.ref_name }}' | tr -d 'v')" >> $GITHUB_OUTPUT
+          echo "VERSION=$(echo '${{github.ref_name }}' | tr -d 'v')" >> $GITHUB_OUTPUT
         
       - uses: actions/checkout@v3
         with:
