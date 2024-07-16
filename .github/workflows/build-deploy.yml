@@ -26,14 +26,18 @@ jobs:
   create_nuget:
     runs-on: ubuntu-latest
     steps:
+      - name: Detect version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
-      
-      - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} /p:Version="1.0.${{ github.run_number }}"
+        
+      - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} /p:Version="${{ steps.get_version.outputs.VERSION != '' && steps.get_version.outputs.VERSION || join([1, 0, github.run_number], '.') }}"
       
       - uses: actions/upload-artifact@v3
         with:
