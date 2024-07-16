@@ -29,7 +29,8 @@ jobs:
       - name: Detect version
         id: get_version
         run: |
-          echo "VERSION=$(echo '${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}' | tr -d 'v')" >> $GITHUB_OUTPUT
+          echo "$(semver=$(echo "${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}" | tr -d "v"); echo "VERSION=${semver}")"
+#          echo "VERSION=$(echo "${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}" | tr -d "v")" >> $GITHUB_OUTPUT
         
       - uses: actions/checkout@v3
         with:
