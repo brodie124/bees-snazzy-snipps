@@ -62,10 +62,10 @@ public static class ServiceResult
     /// <returns></returns>
     public static ServiceResult<T> FailureFromServiceResult<TAlt, T>(
         ServiceResult<TAlt> serviceResult,
-        T? value,
+        T? value = default,
         string? errorMessage = null,
         ResultStatusCode? statusCode = null) 
-        => Failure<T>(serviceResult.InnerException ?? null, errorMessage ?? serviceResult.ErrorMessage, statusCode ?? serviceResult.StatusCode, value);
+        => Failure(serviceResult.InnerException ?? null, errorMessage ?? serviceResult.ErrorMessage, statusCode ?? serviceResult.StatusCode, value);
 }
 
 public record ServiceResult<T>(
