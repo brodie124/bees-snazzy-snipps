@@ -113,7 +113,7 @@ public record ServiceResult<T>(
     /// <typeparam name="TAlt"></typeparam>
     /// <returns></returns>
     public ServiceResult<TAlt> PassThroughFail<TAlt>(
-        TAlt? value,
+        TAlt? value = default,
         string? errorMessage = null,
         ResultStatusCode? statusCode = null)
     {
