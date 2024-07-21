@@ -24,6 +24,8 @@ services without losing the context of the underlying error.
 >
 > It is my personal preference to not expose internal workings to the public domain.
 
+
+### Basic Usage
 Below is a simple example of the `ServiceResult` where there are three possible return paths:
 the user could not be created because the name is taken, the user could not be created because of an unknown error,
 or the user is created successfully.
@@ -51,18 +53,48 @@ public async Task<ServiceResult<User>> CreateUserAsync(string username, string p
 The caller is then able to use this result to present a useful error to the user/client. For example, in an API controller
 it may look as follows:
 ```csharp
-    public async Task<IActionResult> CreateUser(string username, string password)
-    {
-        var createUserResult = await CreateUserAsync(username, password);
-        if (createUserResult.TryGet(out var user))
-            return Ok(user);
+public async Task<IActionResult> CreateUser(string username, string password)
+{
+    var createUserResult = await CreateUserAsync(username, password);
+    if (createUserResult.TryGet(out var user))
+        return Ok(user);
 
-        if (createUserResult.StatusCode == ResultStatusCode.ResourceAlreadyExists)
-            return Conflict();
+    if (createUserResult.StatusCode == ResultStatusCode.ResourceAlreadyExists)
+        return Conflict();
 
-        return Problem();
-    }
+    return Problem();
+}
 ```
+
+### Advanced usage
+In more complex scenarios it is likely that a result will need to be bubbled up through multiple layers.
+Achieving this when the return type of each layer is the same; however, what can we do when this is not the case?
+
+We have a couple of choices, depending on the specific circumstances. 
+
+Firstly, if the result is known to be in an error state, we can call the `PassThroughFail` method. 
+This will create a new ServiceResult of a different type. The value must be changed, however, the result code, 
+error message and inner exception will be copied across.
+
+```csharp
+public ServiceResult<OtherComplexType> BubbleUpErrors()
+{
+    ServiceResult<ComplexType> createResult = CreateComplexType();
+    if (createResult.IsFailure || !createResult.TryGet(out var balanceRecord))
+        return createResult.PassThroughFail<OtherComplexType>(); // This will create a new ServiceResult<OtherComplexType>
+                                                                 // The value will be set to default value for the type provided.
+                                                                 // In this case, null.
+                                                                     
+    var otherComplexType = balanceRecord.CreateOtherComplexType();
+    return otherComplexType;
+}
+```
+
+Secondly, it is possible to convert/map the ServiceResult<T> into a different type using a lambda/anonymous function.
+The lambda is given the entire original ServiceResult to convert as needed. A simple example is provided below where we can 
+hide the "invalid username" / "invalid password message".
+
+> TODO: provide a code sample
 
 
 ## ApiResult
